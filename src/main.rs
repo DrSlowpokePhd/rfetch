@@ -8,6 +8,20 @@
 use std::time::SystemTime;
 use std::env;
 
+
+#[cfg(test)]
+// tests for the helper functions
+mod test {
+    #[test]
+    #[ignore]
+    fn test_name() {
+        use crate::boxed;
+        boxed("hello, world!", 1);
+        // test boxed with newline
+        boxed("hello,\n world!", 1);
+    }
+}
+
 // helper functions for the boxed function
 fn print_times(content: &str, times: u8) {
     // prints a string a set amount of times
@@ -15,6 +29,7 @@ fn print_times(content: &str, times: u8) {
         print!("{}", content)
     }
 }
+
 
 fn print_block(width: u8, times: u8) {
     // prints a vertical block with a width of
