@@ -31,7 +31,7 @@ fn print_times(content: &str, times: u8) {
 }
 
 
-fn print_block(width: u8, times: u8) {
+fn print_block(width: u8, _times: u8) {
     // prints a vertical block with a width of
     // spaces between bars
     let mut block = String::new();
@@ -51,7 +51,7 @@ fn boxed(input: &str, margin: u8) {
 
     print_times("━", margin);
 
-    for x in input.chars() {
+    for _x in input.chars() {
         print!("━");
     }
     print_times("━", margin);
@@ -67,7 +67,7 @@ fn boxed(input: &str, margin: u8) {
     for _ in 0..margin {
         print!("━")
     }
-    for x in input.chars() {
+    for _x in input.chars() {
         print!("━");
     }for _ in 0..margin {
         print!("━")
@@ -76,16 +76,13 @@ fn boxed(input: &str, margin: u8) {
 }
 
 fn main() {
-    let seconds_since_unix_epoch = match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
-        Ok(n) => n.as_secs(),
+    let seconds_since_unix_epoch:f64 = match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
+        Ok(n) => n.as_secs() as f64,
         Err(_) => panic!("System Time before unix epoch"),
     };
-    let minutes_since_unix_epoch = seconds_since_unix_epoch/60;
-    let hours_since_unix_epoch = minutes_since_unix_epoch/60;
-    let days_since_unix_epoch = hours_since_unix_epoch/24;
-    let years_since_unix_epoch = days_since_unix_epoch/360;
-    let mut name;
+
     // get current username of user logged in
+    let name;
     match env::var("USER") {
         Ok(val) => name = val,
         Err(_) => panic!("Name doesnt exist")
@@ -95,6 +92,12 @@ fn main() {
         if args == "-s" {
             println!("It has been {} seconds since the unix epoch", seconds_since_unix_epoch);
         }
+
+        if args == "-v" {
+            for (key, value) in env::vars_os() {
+                println!("{:?} : {:?}", key, value);
+            }
+        }
     }
 
     let mut greeting: String = String::from("Welcome Back, ");
@@ -102,10 +105,6 @@ fn main() {
         greeting.push(x);
     }
     boxed(greeting.as_str(), 2u8);
-
-    println!("It has been {} minutes since the unix epoch", minutes_since_unix_epoch);
-    println!("It has been {} hours since the unix epoch", hours_since_unix_epoch);
-    println!("It has been {} days since the unix epoch", days_since_unix_epoch);
-    println!("It has been {} years since the unix epoch", years_since_unix_epoch);
-
+    println!("Shell: {:?}", env::var("SHELL").unwrap());
+    println!("Terminal: {:?}", env::var("TERM").unwrap());
 }
